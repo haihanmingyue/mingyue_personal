@@ -13,18 +13,27 @@
 
 
             <el-col :span="6" v-for="(i,index) in list" :key="index" style="margin-bottom: 20px">
-              <el-card style="max-height: 400px">
+              <el-card style="max-height: 400px;min-height: 150px;min-width: 50px">
 
-                <div class="block" style="width: 100%;text-align: center;">
-                  <span class="demonstration" style="font-size: 20px"><b>{{ i.name }}</b></span>
-                  <el-image style="width: 250px;height: 300px" :src="'mingyue/attach/download?uuid=' + i.pictureUuid">
-                    <div slot="error" class="image-slot">
-                      <i class="el-icon-picture-outline"></i>
-                    </div>
-                  </el-image>
-                  <el-button :circle="true" @click="toAttach(i)">
-                    <i class="el-icon-caret-right"></i>
-                  </el-button>
+                <div class="block" style="width: 100%;text-align: center;position: relative">
+
+                  <div ref="fontDiv" style="width: 100%;float: left"><span class="demonstration"><b>{{ i.name }}</b></span>
+                  </div>
+
+                  <div style="width: 100%;float: left">
+                    <el-image style="max-width: 250px;max-height: 300px"
+                              :src="'/mingyue/attach/download?uuid=' + i.pictureUuid">
+                      <div slot="error" class="image-slot">
+                        <i class="el-icon-picture-outline"></i>
+                      </div>
+                    </el-image>
+                  </div>
+
+                  <div style="width: 100%;float: left">
+                    <el-button style="" :circle="true" @click="toAttach(i)">
+                      <i class="el-icon-caret-right"></i>
+                    </el-button>
+                  </div>
                 </div>
 
               </el-card>
@@ -98,6 +107,9 @@ export default {
     this.name = this.$route.query.name
     this.form.fatherType = this.$route.query.uuid;
     await this.loading();
+    this.$nextTick(() =>{
+      window.addEventListener('resize', this.handleResize)
+    })
   },
   methods: {
     toAttach(i) {
@@ -136,6 +148,25 @@ export default {
       video.src = "/mingyue/hello/open?uuid=" + arr[0] + "&type=" + arr[1];
       this.type = arr[1];
       video.play();
+    },
+    handleResize() {
+      //检测div盒子长宽
+      const obj = this.$refs.fontDiv;
+      if (obj) {
+        if (obj.length) {
+          const width = obj[0].offsetWidth;
+          if (width >= 100) {
+            for (let i in obj) {
+              obj[i].style.fontSize = '1em';
+            }
+          }
+          else {
+            for (let i in obj) {
+              obj[i].style.fontSize = '0.5em'
+            }
+          }
+        }
+      }
     }
   }
 }
