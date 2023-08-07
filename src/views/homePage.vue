@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg">
     <div class="header">
       <div class="box">
         <nav>
@@ -7,7 +7,8 @@
         </nav>
         <div style="position: absolute;right: 20px">
           <el-dropdown trigger="click" @command="handleCommand">
-            <el-avatar class="el-dropdown-link" src="favicon.ico"></el-avatar>
+            <el-avatar class="el-dropdown-link"
+                       :src="'/mingyue/attach/download?uuid='+ $route.query.headerPic"></el-avatar>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :command="'person'">个人中心</el-dropdown-item>
               <el-dropdown-item :command="'change'">修改密码</el-dropdown-item>
@@ -18,10 +19,7 @@
       </div>
     </div>
     <div class="contents">
-      <div class="content">
-        <!--指定组件的位置-->
-        <router-view></router-view>
-      </div>
+
     </div>
 
   </div>
@@ -170,5 +168,16 @@ nav a:hover {
   width: 1400px;
   height: 1400px;
   /*background-color: #f0f2f3;*/
+}
+.bg {
+  /*图片地址 不重复 水平位置居中 垂直位置居中*/
+  /*background: url("/public/img/homePage.png") no-repeat center center;*/
+  height: 100%;
+  width: 100%;
+  /*把背景图片放大到适合元素容器的尺寸，图片比例不变*/
+  background-size:cover;
+  position:absolute;
+  left:0;
+  top:0;
 }
 </style>

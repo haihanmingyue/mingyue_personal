@@ -4,7 +4,7 @@
         style=" position: absolute; width: 100%;height: 100%; "
         class="bg"></div>
     <div
-        style=" position: absolute; width: 100%;height: 100%; background-color: #e3e3e3;opacity: 0.5;
+        style=" position: absolute; width: 100%;height: 100%; background-color: #000000;opacity: 0.2;
         min-width: 2220px;min-height: 1260px;"
         ></div>
 
@@ -168,12 +168,12 @@ export default {
             obj.password = encryptedData(obj.password);
             const loginRes = await login(obj);
             if (loginRes && loginRes.code && loginRes.code === 200) {
-              setToken(loginRes.data)
-              setLocalToken(loginRes.data)
+              setToken(loginRes.data.sessionId)
+              setLocalToken(loginRes.data.sessionId)
               if (this.rememberMe) {
                 localStorage.setItem("user",JSON.stringify(this.form))
               }
-              this.goPage({routeName: "homePage", params: {}})
+              this.goPage({routeName: "homePage", params: {headerPic: '1ff6f5be-b755-4f50-8885-de51788d9f0d'}})
             }
           } else {
             console.log('error submit!!');
@@ -189,21 +189,21 @@ export default {
   watch: {
     'rememberMe': {
       handler(newVal, oldVal) {
-        if(newVal && this.count === 0) {
-          MessageBox.confirm(
-              "您记住了账号密码，请确保客户端为私人使用",
-              "系统提示",
-              {
-                confirmButtonText: "知道了",
-                cancelButtonText: "取消",
-                type: "warning"
-              }
-          ).then(() => {
-            this.count++;
-          }).catch(() =>{
-            this.count++;
-          });
-        }
+        // if(newVal && this.count === 0) {
+        //   MessageBox.confirm(
+        //       "您记住了账号密码，请确保客户端为私人使用",
+        //       "系统提示",
+        //       {
+        //         confirmButtonText: "知道了",
+        //         cancelButtonText: "取消",
+        //         type: "warning"
+        //       }
+        //   ).then(() => {
+        //     this.count++;
+        //   }).catch(() =>{
+        //     this.count++;
+        //   });
+        // }
       },
       deep: true
     }
@@ -213,12 +213,14 @@ export default {
 
 <style scoped>
 .bg {
-  opacity: 0.5;
-  min-width: 2220px;
-  min-height: 1260px;
-  /*background-image: url('/public/img/bg.png');*/
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-position: 0 0;
+  /*图片地址 不重复 水平位置居中 垂直位置居中*/
+  background: url("/public/img/bg.jpg") no-repeat center center;
+  height: 100%;
+  width: 100%;
+  /*把背景图片放大到适合元素容器的尺寸，图片比例不变*/
+  background-size:cover;
+  position:absolute;
+  left:0;
+  top:0;
 }
 </style>
