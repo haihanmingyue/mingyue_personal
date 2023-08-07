@@ -13,9 +13,9 @@
 
 
             <el-col :span="6" v-for="(i,index) in list" :key="index" style="margin-bottom: 20px">
-              <el-card style="max-height: 400px;min-height: 150px;min-width: 50px">
+              <el-card ref="cardDiv"  style="max-height: 400px;min-height: 150px;min-width: 50px">
 
-                <div class="block" style="width: 100%;text-align: center;position: relative">
+                <div class="block" ref="msgDiv" style="width: 100%;text-align: center;position: relative">
 
                   <div ref="fontDiv" class="fontDiv" style="width: 100%;float: left"><span class="demonstration"><b>{{ i.name }}</b></span>
                   </div>
@@ -29,7 +29,7 @@
                     </el-image>
                   </div>
 
-                  <div style="width: 100%;float: left">
+                  <div style="position: relative;bottom: 0;width: 100%;">
                     <el-button style="" :circle="true" @click="toAttach(i)">
                       <i class="el-icon-caret-right"></i>
                     </el-button>
@@ -79,7 +79,7 @@ const {attachTypeList,saveAttachType} = require("@/api");
 
 
 export default {
-  name: "attach",
+  name: "uploadPage_attach",
   mixins: [views],
   components: {
     picUpload
@@ -106,6 +106,15 @@ export default {
     this.name = this.$route.query.name
     this.form.fatherType = this.$route.query.uuid;
     await this.loading();
+
+    //
+    // const cardHeight = this.$refs.cardDiv[0].$el.offsetHeight;
+    //
+    // for (let i in this.$refs.msgDiv) {
+    //   this.$refs.msgDiv[i].style.height = (cardHeight - 20) + 'px';
+    // }
+
+
     // this.handleResize();
     // this.$nextTick(() =>{
     //   window.addEventListener('resize', this.handleResize)
@@ -113,7 +122,7 @@ export default {
   },
   methods: {
     toAttach(i) {
-      this.goPage({routeName: "attachSubType", params: {...i}})
+      this.goPage({routeName: "uploadPage_attachSubType", params: {...i}})
     },
     async loading() {
       const res = await attachSubTypeList({fatherType: this.form.fatherType});

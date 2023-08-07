@@ -7,6 +7,7 @@
              background-color="#545c64"
              @select="handleSelect"
              :text-color="'#fff'"
+             menu-trigger="click"
              :active-text-color="'#ffd04b'"
     >
       <div class="titleMenu" style="float: left;width: 50%;max-height: 60px;">
@@ -73,9 +74,8 @@ export default {
     })
   },
   mounted() {
-    this.$nextTick(() => {
-      this.activeIndex = this.$route.name
-    })
+    this.activeIndex = this.$route.name
+    console.log("act",this.activeIndex)
   },
   methods: {
     handleClick() {
@@ -116,30 +116,22 @@ export default {
         }
       }
     },
+  },
+  watch: {
+    $route(to,from){
+      console.log(to.name)
+      if(to.name === 'homePage') {
+        this.activeIndex = ''
+      } else {
+        this.activeIndex = to.name.split("_")[0]
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 50px;
-  background-color: #292c2f;
-  color: #ffffff;
 
-  /*吸顶效果*/
-  /* position: sticky;
-   position: -webkit-sticky;    !*兼容 -webkit 内核的浏览器*!
-   top: 0px;                    !*必须设一个值，否则不生效*!*/
-
-}
-
-.box {
-  display: flex;
-  align-items: center;
-}
 
 h1 {
   display: flex;
@@ -174,51 +166,6 @@ nav a:hover {
   opacity: 1;
 }
 
-.active {
-  color: #608bd2;
-  pointer-events: none;
-  opacity: 1;
-}
-
-/*搜索框*/
-
-.text {
-  height: 22px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  padding: 3px 16px;
-  border-bottom-left-radius: 20px;
-  border-top-left-radius: 20px;
-}
-
-.text:focus {
-  outline: none;
-  border-color: rgba(82, 168, 236, 0.8);
-  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-}
-
-.button {
-  width: 60px;
-  height: 30px;
-  font-size: 14px;
-  margin-right: 35px;
-  border: 1px solid #608bd2;
-  background-color: #608bd2;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-}
-
-.contents {
-  display: flex;
-  justify-content: center;
-}
-
-.content {
-  display: flex;
-  width: 1400px;
-  height: 1400px;
-  /*background-color: #f0f2f3;*/
-}
 
 .bg {
   /*图片地址 不重复 水平位置居中 垂直位置居中*/

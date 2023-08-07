@@ -30,6 +30,8 @@
               <el-card ref="cardDiv"  style="max-height: 400px;min-height: 150px;min-width: 50px">
 
                 <div class="block" ref="msgDiv" style=";position: relative">
+
+
                   <div ref="fontDiv" class="fontDiv" style="width: 100%;float: left;">
                     <span class="demonstration"><b>{{ i.name }}</b></span>
                   </div>
@@ -98,7 +100,7 @@ const {getFileList} = require("@/api");
 const {saveAttachSubType,attachSubTypeList,upload} = require("@/api");
 
 export default {
-  name: "attachSubType",
+  name: "uploadPage_attachSubType",
   mixins: [views],
   component: {
     picUpload,

@@ -15,17 +15,18 @@
 
 
             <el-col :span="6" v-for="(i,index) in list" :key="index" style="margin-bottom: 20px;">
-              <el-card style="max-height: 400px;min-height: 150px;min-width: 50px">
+              <el-card ref="cardDiv" style="min-width: 50px">
 
-                <div class="block" style="width: 100%;text-align: center;position: relative">
+                <div class="block" ref="msgDiv" style="width: 100%;text-align: center;position: relative">
 
 
-                  <div class="fontDiv" style="width: 100%;float: left"><span class="demonstration"><b>{{ i.name }}</b></span>
+                  <div class="fontDiv" style="width: 100%;"><span class="demonstration"><b>{{ i.name }}</b></span>
                   </div>
 
 
-                  <div style="width: 100%;float: left">
-                    <el-image style="max-width: 250px;max-height: 300px"
+                  <div style="">
+
+                    <el-image style="max-width: 250px;max-height: 200px"
                               :src="'/mingyue/attach/download?uuid=' + i.pictureUuid">
                       <div slot="error" class="image-slot">
                         <i class="el-icon-picture-outline"></i>
@@ -34,8 +35,8 @@
                   </div>
 
 
-                  <div style="float: left;width: 100%">
-                    <el-button class="toAtt"  :circle="true" @click="toAttach(i)">
+                  <div>
+                    <el-button class="toAtt" :circle="true" @click="toAttach(i)">
                       <i class="el-icon-caret-right"></i>
                     </el-button>
                   </div>
@@ -105,9 +106,14 @@ export default {
   },
   activated() {
   },
-  mounted() {
-    this.loading();
-    this.$nextTick(() =>{
+  async mounted() {
+    await this.loading();
+    // const cardHeight = this.$refs.cardDiv[0].$el.offsetHeight;
+    //
+    // for (let i in this.$refs.msgDiv) {
+    //   this.$refs.msgDiv[i].style.height = (cardHeight - 20) + 'px';
+    // }
+    this.$nextTick(() => {
       // this.handleResize();
       window.addEventListener('resize', this.handleResize)
     })
@@ -122,7 +128,7 @@ export default {
       }
     },
     toAttach(i) {
-      this.goPage({routeName: "attach", params: {...i}})
+      this.goPage({routeName: "uploadPage_attach", params: {...i}})
     },
     upload(res) {
       this.form.pictureUuid = res.data
@@ -175,10 +181,22 @@ export default {
   padding: 10px 0;
   background-color: #f9fafc;
 }
+
 @media (max-width: 730px) {
-  .fontDiv{
+  .fontDiv {
     font-size: 0.5em;
   }
 
+}
+
+.bg {
+  /*图片地址 不重复 水平位置居中 垂直位置居中*/
+  height: 100%;
+  width: 100%;
+  /*把背景图片放大到适合元素容器的尺寸，图片比例不变*/
+  background-size: cover;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 </style>

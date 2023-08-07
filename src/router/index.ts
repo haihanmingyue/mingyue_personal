@@ -26,14 +26,12 @@ const routes = [
             },
             {
                 path: '/attach',
-                name: 'attach',
+                name: 'uploadPage_attach',
                 component: () => import('../views/attachType.vue'),
-                children: [
-                ]
             },
             {
                 path: '/attach/subType',
-                name: 'attachSubType',
+                name: 'uploadPage_attachSubType',
                 component: () => import('../views/attachSubType.vue'),
             }
         ]
