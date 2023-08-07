@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%">
+  <div style="width: 100%" ref="bodyDiv">
     <el-row :gutter="20">
       <el-col :span="24">
         <div style="float: left;margin-top: 7%">
@@ -14,35 +14,17 @@
           <el-row :gutter="20">
 
 
-            <el-col :span="6" v-for="(i,index) in list" :key="index" style="margin-bottom: 20px;">
-              <el-card ref="cardDiv" style="min-width: 50px">
-
-                <div class="block" ref="msgDiv" style="width: 100%;text-align: center;position: relative">
-
-
-                  <div class="fontDiv" style="width: 100%;"><span class="demonstration"><b>{{ i.name }}</b></span>
+            <el-col :span="span" v-for="(i,index) in list" :key="index" style="margin-bottom: 20px;">
+              <div @click="toAttach(i)">
+                <el-card ref="cardDiv" style="min-width: 50px" class="block">
+                  <div ref="msgDiv" style="width: 100%;text-align: center;">
+                    <div class="fontDiv" style="width: 100%;"><span class="demonstration"><b>{{ i.name }}</b></span>
+                    </div>
                   </div>
 
+                </el-card>
 
-                  <div style="">
-
-                    <el-image style="max-width: 250px;max-height: 200px"
-                              :src="'/mingyue/attach/download?uuid=' + i.pictureUuid">
-                      <div slot="error" class="image-slot">
-                        <i class="el-icon-picture-outline"></i>
-                      </div>
-                    </el-image>
-                  </div>
-
-
-                  <div>
-                    <el-button class="toAtt" :circle="true" @click="toAttach(i)">
-                      <i class="el-icon-caret-right"></i>
-                    </el-button>
-                  </div>
-                </div>
-
-              </el-card>
+              </div>
 
             </el-col>
 
@@ -97,7 +79,8 @@ export default {
       type: "mp4",
       list: [],
       addFlag: false,
-      title: '新增分类'
+      title: '新增分类',
+      span: 12
     }
   },
   created() {
@@ -113,6 +96,7 @@ export default {
     // for (let i in this.$refs.msgDiv) {
     //   this.$refs.msgDiv[i].style.height = (cardHeight - 20) + 'px';
     // }
+    this.handleResize();
     this.$nextTick(() => {
       // this.handleResize();
       window.addEventListener('resize', this.handleResize)
@@ -154,7 +138,17 @@ export default {
     },
     handleResize() {
       // //检测div盒子长宽
-      // const obj = this.$refs.fontDiv;
+      const width = this.$refs.bodyDiv.offsetWidth;
+
+      if (width < 250) {
+        this.span = 24;
+      } else if (width > 250 && width < 500) {
+        this.span = 12;
+      } else {
+        this.span = 6;
+      }
+
+
       //
       // if (obj) {
       //   if (obj.length && obj.length >= 1) {
@@ -188,7 +182,10 @@ export default {
   }
 
 }
-
+.block:hover{
+  transform: translateY(-5px);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
 .bg {
   /*图片地址 不重复 水平位置居中 垂直位置居中*/
   height: 100%;

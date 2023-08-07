@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%">
+  <div style="width: 100%" ref="bodyDiv">
     <el-row :gutter="20">
       <el-col :span="24">
         <div style="float: left;margin-top: 7%">
@@ -12,31 +12,28 @@
           <el-row :gutter="20">
 
 
-            <el-col :span="6" v-for="(i,index) in list" :key="index" style="margin-bottom: 20px">
-              <el-card ref="cardDiv"  style="max-height: 400px;min-height: 150px;min-width: 50px">
+            <el-col :span="span" v-for="(i,index) in list" :key="index" style="margin-bottom: 20px">
+              <div @click="toAttach(i)" >
+                <el-card ref="cardDiv" class="block" style="max-height: 400px;min-height: 150px;min-width: 50px">
 
-                <div class="block" ref="msgDiv" style="width: 100%;text-align: center;position: relative">
+                  <div class="block"  ref="msgDiv" style="width: 100%;text-align: center;position: relative">
 
-                  <div ref="fontDiv" class="fontDiv" style="width: 100%;float: left"><span class="demonstration"><b>{{ i.name }}</b></span>
+                    <div ref="fontDiv" class="fontDiv" style="width: 100%;float: left"><span class="demonstration"><b>{{ i.name }}</b></span>
+                    </div>
+
+                    <div style="width: 100%;float: left">
+                      <el-image style="max-width: 250px;max-height: 300px"
+                                :src="'/mingyue/attach/download?uuid=' + i.pictureUuid">
+                        <div slot="error" class="image-slot">
+                          <i class="el-icon-picture-outline"></i>
+                        </div>
+                      </el-image>
+                    </div>
+
                   </div>
 
-                  <div style="width: 100%;float: left">
-                    <el-image style="max-width: 250px;max-height: 300px"
-                              :src="'/mingyue/attach/download?uuid=' + i.pictureUuid">
-                      <div slot="error" class="image-slot">
-                        <i class="el-icon-picture-outline"></i>
-                      </div>
-                    </el-image>
-                  </div>
-
-                  <div style="position: relative;bottom: 0;width: 100%;">
-                    <el-button style="" :circle="true" @click="toAttach(i)">
-                      <i class="el-icon-caret-right"></i>
-                    </el-button>
-                  </div>
-                </div>
-
-              </el-card>
+                </el-card>
+              </div>
 
             </el-col>
 
@@ -86,6 +83,7 @@ export default {
   },
   data() {
     return {
+      span: 6,
       name: '',
       form: {
         name: '',
@@ -102,23 +100,14 @@ export default {
   },
   created() {
   },
-  async mounted() {
+  activated() {
     this.name = this.$route.query.name
     this.form.fatherType = this.$route.query.uuid;
-    await this.loading();
-
-    //
-    // const cardHeight = this.$refs.cardDiv[0].$el.offsetHeight;
-    //
-    // for (let i in this.$refs.msgDiv) {
-    //   this.$refs.msgDiv[i].style.height = (cardHeight - 20) + 'px';
-    // }
-
-
-    // this.handleResize();
-    // this.$nextTick(() =>{
-    //   window.addEventListener('resize', this.handleResize)
-    // })
+    this.loading();
+    this.handleResize();
+    this.$nextTick(async () =>{
+      window.addEventListener('resize', this.handleResize)
+    })
   },
   methods: {
     toAttach(i) {
@@ -159,23 +148,16 @@ export default {
       video.play();
     },
     handleResize() {
-      //检测div盒子长宽
-      const obj = this.$refs.fontDiv;
-      if (obj) {
-        if (obj.length) {
-          const width = obj[0].offsetWidth;
-          if (width >= 100) {
-            for (let i in obj) {
-              obj[i].style.fontSize = '1em';
-            }
-          }
-          else {
-            for (let i in obj) {
-              obj[i].style.fontSize = '0.5em'
-            }
-          }
-        }
+      const width = this.$refs.bodyDiv.offsetWidth;
+
+      if (width < 250) {
+        this.span = 24;
+      } else if (width > 250 && width < 500) {
+        this.span = 12;
+      } else {
+        this.span = 6;
       }
+
     }
   }
 }
@@ -191,5 +173,8 @@ export default {
     font-size: 0.5em;
   }
 }
-
+.block:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
 </style>
