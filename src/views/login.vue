@@ -173,7 +173,7 @@ export default {
               if (this.rememberMe) {
                 localStorage.setItem("user",JSON.stringify(this.form))
               }
-              this.goPage({routeName: "homePage", params: {headerPic: '1ff6f5be-b755-4f50-8885-de51788d9f0d'}})
+              this.goPage({routeName: "homePage"})
             }
           } else {
             console.log('error submit!!');

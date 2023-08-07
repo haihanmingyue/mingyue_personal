@@ -30,7 +30,7 @@
               <el-card ref="cardDiv"  style="max-height: 400px;min-height: 150px;min-width: 50px">
 
                 <div class="block" ref="msgDiv" style=";position: relative">
-                  <div ref="fontDiv" style="width: 100%;float: left;">
+                  <div ref="fontDiv" class="fontDiv" style="width: 100%;float: left;">
                     <span class="demonstration"><b>{{ i.name }}</b></span>
                   </div>
 
@@ -129,7 +129,6 @@ export default {
   created() {
   },
   async mounted() {
-    console.log(this.$route.query)
     this.name = this.$route.query.name
     await this.loading();
 
@@ -138,9 +137,10 @@ export default {
     for (let i in this.$refs.msgDiv) {
       this.$refs.msgDiv[i].style.height = (cardHeight - 20) + 'px';
     }
-    this.$nextTick(() =>{
-      window.addEventListener('resize', this.handleResize)
-    })
+    // // this.handleResize();
+    // this.$nextTick(() =>{
+    //   window.addEventListener('resize', this.handleResize)
+    // })
   },
   methods: {
     async handleUpload(arg) {
@@ -253,5 +253,10 @@ export default {
 }
 .block {
   text-align: center;
+}
+@media (max-width: 730px) {
+  .fontDiv {
+    font-size: 0.5em;
+  }
 }
 </style>

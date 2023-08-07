@@ -17,7 +17,7 @@
 
                 <div class="block" style="width: 100%;text-align: center;position: relative">
 
-                  <div ref="fontDiv" style="width: 100%;float: left"><span class="demonstration"><b>{{ i.name }}</b></span>
+                  <div ref="fontDiv" class="fontDiv" style="width: 100%;float: left"><span class="demonstration"><b>{{ i.name }}</b></span>
                   </div>
 
                   <div style="width: 100%;float: left">
@@ -103,13 +103,13 @@ export default {
   created() {
   },
   async mounted() {
-    console.log(this.$route.query)
     this.name = this.$route.query.name
     this.form.fatherType = this.$route.query.uuid;
     await this.loading();
-    this.$nextTick(() =>{
-      window.addEventListener('resize', this.handleResize)
-    })
+    // this.handleResize();
+    // this.$nextTick(() =>{
+    //   window.addEventListener('resize', this.handleResize)
+    // })
   },
   methods: {
     toAttach(i) {
@@ -177,4 +177,10 @@ export default {
   padding: 10px 0;
   background-color: #f9fafc;
 }
+@media (max-width: 730px) {
+  .fontDiv {
+    font-size: 0.5em;
+  }
+}
+
 </style>

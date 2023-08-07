@@ -20,19 +20,19 @@ const routes = [
         component: () => import('../views/homePage.vue'),
         children: [
             {
-                path: '/homePage/upload',
-                name: 'upload',
+                path: '/uploadPage',
+                name: 'uploadPage',
                 component: () => import('../views/upload.vue'),
             },
             {
-                path: '/homePage/attach',
+                path: '/attach',
                 name: 'attach',
                 component: () => import('../views/attachType.vue'),
                 children: [
                 ]
             },
             {
-                path: '/homePage/attach/subType',
+                path: '/attach/subType',
                 name: 'attachSubType',
                 component: () => import('../views/attachSubType.vue'),
             }

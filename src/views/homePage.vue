@@ -1,25 +1,51 @@
 <template>
   <div class="bg">
-    <div class="header">
-      <div class="box">
-        <nav>
-          <a active-class="active" @click="go('media')"> 媒体</a>
-        </nav>
-        <div style="position: absolute;right: 20px">
-          <el-dropdown trigger="click" @command="handleCommand">
-            <el-avatar class="el-dropdown-link"
-                       :src="'/mingyue/attach/download?uuid='+ $route.query.headerPic"></el-avatar>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item :command="'person'">个人中心</el-dropdown-item>
-              <el-dropdown-item :command="'change'">修改密码</el-dropdown-item>
-              <el-dropdown-item :command="'loginOut'">退出</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div>
-      </div>
-    </div>
-    <div class="contents">
 
+    <el-menu :default-active="activeIndex"
+             class="el-menu-demo"
+             mode="horizontal"
+             background-color="#545c64"
+             @select="handleSelect"
+             :text-color="'#fff'"
+             :active-text-color="'#ffd04b'"
+    >
+      <div class="titleMenu" style="float: left;width: 50%;max-height: 60px;">
+        <el-menu-item :index="'uploadPage'" style="float: left">媒体</el-menu-item>
+        <el-menu-item index="2" style="float: left">其他1</el-menu-item>
+        <el-menu-item index="2" style="float: left">其他1</el-menu-item>
+        <el-menu-item index="2" style="float: left">其他1</el-menu-item>
+        <el-menu-item index="2" style="float: left">其他1</el-menu-item>
+        <el-menu-item index="2" style="float: left">其他1</el-menu-item>
+      </div>
+      <div class="titleMenu2" style="float: left;min-width: 80px;max-height: 60px;background-color: #292c2f">
+        <el-submenu index="2">
+          <template slot="title"><i class="el-icon-menu"></i></template>
+          <el-menu-item :index="'uploadPage'" >媒体</el-menu-item>
+          <el-menu-item index="2" >其他1</el-menu-item>
+          <el-menu-item index="2" >其他1</el-menu-item>
+          <el-menu-item index="2" >其他1</el-menu-item>
+          <el-menu-item index="2" >其他1</el-menu-item>
+          <el-menu-item index="2" >其他1</el-menu-item>
+        </el-submenu>
+      </div>
+      <div class="headerPic" style="position: absolute;right: 20px;bottom: 6px">
+        <el-dropdown trigger="click" @command="handleCommand">
+          <el-avatar class="el-dropdown-link"
+                     :src="'/mingyue/attach/download?uuid='+ getUsetHeaderPic()"></el-avatar>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item :command="'person'">个人中心</el-dropdown-item>
+            <el-dropdown-item :command="'change'">修改密码</el-dropdown-item>
+            <el-dropdown-item :command="'loginOut'">退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+    </el-menu>
+
+<!--    子路由-->
+    <div class="children_page" style="display: block;margin: 0 auto;">
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
 
   </div>
@@ -37,9 +63,26 @@ const {loginOut} = require("@/api");
 export default {
   name: "homePage",
   mixins: [views],
+  data() {
+    return {
+      activeIndex: '',
+    }
+  },
+  created() {
+    this.$nextTick(() => {
+    })
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.activeIndex = this.$route.name
+    })
+  },
   methods: {
     handleClick() {
 
+    },
+    getUsetHeaderPic() {
+      return '1ff6f5be-b755-4f50-8885-de51788d9f0d';
     },
     handleCommand(val) {
       switch (val) {
@@ -59,13 +102,20 @@ export default {
         this.goPage({routeName: 'login', params: {}})
       }
     },
-    go(type) {
-      switch (type) {
-        case 'media':
-          this.goPage({routeName: 'upload', params: {}})
-          break;
+    handleSelect(key, keyPath) {
+      if (key === this.activeIndex) {
+        return;
+      } else {
+        switch (key) {
+          case 'uploadPage':
+            this.goPage({routeName: 'uploadPage'})
+            break
+          default:
+            alert(keyPath + "建设中")
+            break
+        }
       }
-    }
+    },
   }
 }
 </script>
@@ -169,15 +219,41 @@ nav a:hover {
   height: 1400px;
   /*background-color: #f0f2f3;*/
 }
+
 .bg {
   /*图片地址 不重复 水平位置居中 垂直位置居中*/
   /*background: url("/public/img/homePage.png") no-repeat center center;*/
   height: 100%;
   width: 100%;
   /*把背景图片放大到适合元素容器的尺寸，图片比例不变*/
-  background-size:cover;
-  position:absolute;
-  left:0;
-  top:0;
+  background-size: cover;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.headerPic {
+
+}
+.titleMenu2{
+  display: none;
+}
+@media (max-width: 900px) {
+  .titleMenu {
+    display: none;
+  }
+  .titleMenu2{
+    display: block;
+  }
+}
+@media (max-width: 1000px) {
+  .children_page {
+    width: 100%;
+  }
+}
+@media (min-width: 1000px) {
+  .children_page {
+    width: 70%;
+  }
 }
 </style>

@@ -20,7 +20,7 @@
                 <div class="block" style="width: 100%;text-align: center;position: relative">
 
 
-                  <div ref="fontDiv" style="width: 100%;float: left"><span class="demonstration"><b>{{ i.name }}</b></span>
+                  <div class="fontDiv" style="width: 100%;float: left"><span class="demonstration"><b>{{ i.name }}</b></span>
                   </div>
 
 
@@ -35,7 +35,7 @@
 
 
                   <div style="float: left;width: 100%">
-                    <el-button style="" :circle="true" @click="toAttach(i)">
+                    <el-button class="toAtt"  :circle="true" @click="toAttach(i)">
                       <i class="el-icon-caret-right"></i>
                     </el-button>
                   </div>
@@ -76,13 +76,12 @@
 <script>
 import picUpload from "@/utils/upload"
 import views from "@/utils/views";
-import 'video.js/dist/video-js.css'
 
 const {attachTypeList, saveAttachType} = require("@/api");
 
 
 export default {
-  name: "upload",
+  name: "uploadPage",
   mixins: [views],
   components: {
     picUpload
@@ -100,11 +99,16 @@ export default {
       title: '新增分类'
     }
   },
+  created() {
+    this.$nextTick(() => {
+    })
+  },
+  activated() {
+  },
   mounted() {
-
     this.loading();
-
     this.$nextTick(() =>{
+      // this.handleResize();
       window.addEventListener('resize', this.handleResize)
     })
   },
@@ -142,33 +146,25 @@ export default {
       this.addFlag = false;
       this.$refs['form'].resetFields();
     },
-    open(o) {
-      const arr = o.split(".");
-      console.log("sdc->", this.sdc)
-      const video = document.getElementById('vide01');
-      video.src = "/mingyue/hello/open?uuid=" + arr[0] + "&type=" + arr[1];
-      this.type = arr[1];
-      video.play();
-    },
     handleResize() {
-      //检测div盒子长宽
-      const obj = this.$refs.fontDiv;
-
-      if (obj) {
-        if (obj.length && obj.length >= 1) {
-          const width = obj[0].offsetWidth;
-          if (width >= 100) {
-            for (let i in obj) {
-              obj[i].style.fontSize = '1em';
-            }
-          }
-          else {
-            for (let i in obj) {
-              obj[i].style.fontSize = '0.5em'
-            }
-          }
-        }
-      }
+      // //检测div盒子长宽
+      // const obj = this.$refs.fontDiv;
+      //
+      // if (obj) {
+      //   if (obj.length && obj.length >= 1) {
+      //     const width = obj[0].offsetWidth;
+      //     if (width >= 100) {
+      //       for (let i in obj) {
+      //         obj[i].style.fontSize = '1em';
+      //       }
+      //     }
+      //     else {
+      //       for (let i in obj) {
+      //         obj[i].style.fontSize = '0.5em'
+      //       }
+      //     }
+      //   }
+      // }
     }
   }
 }
@@ -178,5 +174,11 @@ export default {
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
+}
+@media (max-width: 730px) {
+  .fontDiv{
+    font-size: 0.5em;
+  }
+
 }
 </style>
