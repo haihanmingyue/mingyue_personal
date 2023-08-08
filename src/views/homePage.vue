@@ -11,12 +11,12 @@
              :active-text-color="'#ffd04b'"
     >
       <div class="titleMenu" style="float: left;width: 50%;max-height: 60px;">
-        <el-menu-item :index="'uploadPage'" style="float: left">媒体</el-menu-item>
-        <el-menu-item index="2" style="float: left">其他1</el-menu-item>
-        <el-menu-item index="2" style="float: left">其他1</el-menu-item>
-        <el-menu-item index="2" style="float: left">其他1</el-menu-item>
-        <el-menu-item index="2" style="float: left">其他1</el-menu-item>
-        <el-menu-item index="2" style="float: left">其他1</el-menu-item>
+
+        <el-menu-item style="float: left" v-for="(i,index) in pageList" :key="index" :index="i.name"
+        >
+          {{i.nameCn}}
+        </el-menu-item>
+        <el-menu-item v-if="pageList == null || pageList.length === 0" style="float: left"></el-menu-item>
       </div>
       <div class="titleMenu2" style="float: left;min-width: 80px;max-height: 60px;background-color: #292c2f">
         <el-submenu index="2">
@@ -55,11 +55,8 @@
 <script>
 
 import views from "@/utils/views"
-
-const {removeLocalToken} = require("@/utils/auth");
-
-const {removeToken} = require("@/utils/auth");
-
+const {removeLocalToken,removeToken} = require("@/utils/auth");
+const {getRoleList} = require("@/router/index.ts")
 const {loginOut} = require("@/api");
 export default {
   name: "homePage",
@@ -67,15 +64,17 @@ export default {
   data() {
     return {
       activeIndex: '',
+      pageList: [],
     }
   },
   created() {
     this.$nextTick(() => {
+      this.pageList = getRoleList();
+      console.log("this.pageList",this.pageList)
+      this.activeIndex = this.$route.name
     })
   },
-  mounted() {
-    this.activeIndex = this.$route.name
-    console.log("act",this.activeIndex)
+  activated() {
   },
   methods: {
     handleClick() {
@@ -119,7 +118,6 @@ export default {
   },
   watch: {
     $route(to,from){
-      console.log(to.name)
       if(to.name === 'homePage') {
         this.activeIndex = ''
       } else {

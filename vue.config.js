@@ -11,7 +11,7 @@ module.exports = defineConfig({
     port: 9527,
     proxy: {
       '/mingyue': {
-        target: "http://192.168.31.193/",
+        target: "http://127.0.0.1:6996/",
         changeOrigin: true
       }
     }

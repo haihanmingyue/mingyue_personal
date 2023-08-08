@@ -59,7 +59,7 @@ request.interceptors.response.use(
       code = +code;
       switch (code) {
         case 200:
-          if (msg !== "查询成功" && msg !== 'noTips' && msg !== "0" && msg !== '') {
+          if (msg !== "查询成功" && msg !== '登录成功' && msg !== 'noTips' && msg !== "0" && msg !== '') {
             if (config.url.indexOf("commonAttach") === -1) {
               Notification.success({
                 title: msg

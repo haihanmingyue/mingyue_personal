@@ -10,6 +10,13 @@ export const getFileList = (attachSubType) => {
     });
 }
 
+export const getRole = () => {
+    return request({
+        url: `/userrole/getRole`,
+        method: "post"
+    });
+}
+
 export const upload = (fileToUpload,subType,fileObj) => {
     const formData = new FormData();
     formData.append("fileToUpload", fileToUpload);
@@ -65,7 +72,7 @@ export const attachSubTypeList = (data) => {
 
 export const login = (data) => {
     return request({
-        url: `/hello/login`,
+        url: `/user/login`,
         method: "post",
         data
     });
@@ -73,7 +80,7 @@ export const login = (data) => {
 
 export const loginOut = (data) => {
     return request({
-        url: `/hello/loginOut`,
+        url: `/user/loginOut`,
         method: "post",
         data
     });
