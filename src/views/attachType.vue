@@ -68,12 +68,7 @@
 import picUpload from "@/utils/upload"
 import 'video.js/dist/video-js.css'
 import views from "@/utils/views";
-const {saveAttachSubType} = require("@/api");
-
-const {attachSubTypeList} = require("@/api");
-
-const {attachTypeList,saveAttachType} = require("@/api");
-
+import {saveAttachSubType,attachSubTypeList } from "@/api";
 
 export default {
   name: "uploadPage_attach",

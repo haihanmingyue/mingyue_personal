@@ -13,8 +13,11 @@ const whiteList = [
 
 router.beforeEach(async (to, from, next) => {
   if (to.path === '/') {
-
-    Element.Message.error('没有该功能权限');
+    if (to.name === 'homePage') {
+      Element.Message.error('没有分配任何权限，请联系管理员');
+    } else {
+      Element.Message.error('没有该功能权限');
+    }
 
   } else {
 
@@ -23,7 +26,6 @@ router.beforeEach(async (to, from, next) => {
         let hasToken = getToken();
         if (!hasToken) {
           hasToken = getLocalToken();
-          console.log("获取local token")
         }
         if (hasToken) {
           const cookie = Cookies.get("JSESSIONID");
@@ -36,7 +38,7 @@ router.beforeEach(async (to, from, next) => {
       next();
     }
     else {
-      NProgress.start();
+      // NProgress.start();
       let hasToken = getToken(); // 获取session storage里面的JSESSIONID 这个token浏览器关闭就会清除
 
       if (!hasToken) {
@@ -52,7 +54,7 @@ router.beforeEach(async (to, from, next) => {
         next();
       } else {
         next({name: "login"});
-        NProgress.done();
+        // NProgress.done();
       }
     }
 
@@ -60,5 +62,6 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.afterEach((to, from) => {
-  NProgress.done();
+  // NProgress.done(); //打开一个页面转圈圈，加载完圈圈消失
 });
+

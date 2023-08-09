@@ -21,12 +21,7 @@
       <div class="titleMenu2" style="float: left;min-width: 80px;max-height: 60px;background-color: #292c2f">
         <el-submenu index="2">
           <template slot="title"><i class="el-icon-menu"></i></template>
-          <el-menu-item :index="'uploadPage'" >媒体</el-menu-item>
-          <el-menu-item index="2" >其他1</el-menu-item>
-          <el-menu-item index="2" >其他1</el-menu-item>
-          <el-menu-item index="2" >其他1</el-menu-item>
-          <el-menu-item index="2" >其他1</el-menu-item>
-          <el-menu-item index="2" >其他1</el-menu-item>
+          <el-menu-item v-for="(i,index) in pageList" :index="i.name" :key="index">{{i.nameCn}}</el-menu-item>
         </el-submenu>
       </div>
       <div class="headerPic" style="position: absolute;right: 20px;bottom: 6px">
@@ -55,9 +50,9 @@
 <script>
 
 import views from "@/utils/views"
-const {removeLocalToken,removeToken} = require("@/utils/auth");
-const {getRoleList} = require("@/router/index.ts")
-const {loginOut} = require("@/api");
+import {removeLocalToken,removeToken} from "@/utils/auth";
+import { getRoleList } from "@/router"
+import { loginOut } from "@/api"
 export default {
   name: "homePage",
   mixins: [views],
@@ -69,8 +64,15 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      this.pageList = getRoleList();
-      console.log("this.pageList",this.pageList)
+      this.pageList = [];
+      const arr = getRoleList();
+      for (const i in arr) {
+        const obj = arr[i];
+        if (obj.name === 'homePage') {
+          this.pageList.push(...obj.childrenList)
+        }
+      }
+      console.log("this.pageList", this.pageList)
       this.activeIndex = this.$route.name
     })
   },

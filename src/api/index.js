@@ -12,7 +12,7 @@ export const getFileList = (attachSubType) => {
 
 export const getRole = () => {
     return request({
-        url: `/userrole/getRole`,
+        url: `/userMenu/getRoleList`,
         method: "post"
     });
 }

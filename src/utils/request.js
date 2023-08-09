@@ -28,11 +28,6 @@ const request = axios.create({
 
 request.interceptors.request.use(
   config => {
-    let menuId = router.history.current.meta.id;
-    if(!menuId){
-      menuId = -1;
-    }
-    menuId && (config.headers.menuId = menuId);
     return config;
   },
   error => {

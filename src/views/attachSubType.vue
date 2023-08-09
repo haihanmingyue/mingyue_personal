@@ -97,9 +97,9 @@ import 'video.js/dist/video-js.css'
 import views from "@/utils/views";
 import {Loading} from 'element-ui'
 
-const {MessageBox} = require("element-ui");
-const {getFileList} = require("@/api");
-const {saveAttachSubType, attachSubTypeList, upload} = require("@/api");
+import { MessageBox } from "element-ui";
+import {getFileList} from "@/api";
+import {saveAttachSubType, upload} from "@/api";
 
 export default {
   name: "uploadPage_attachSubType",

@@ -60,7 +60,7 @@
 import picUpload from "@/utils/upload"
 import views from "@/utils/views";
 
-const {attachTypeList, saveAttachType} = require("@/api");
+import {attachTypeList, saveAttachType} from "@/api";
 
 
 export default {

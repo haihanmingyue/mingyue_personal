@@ -96,8 +96,8 @@ import {login} from "@/api/index.js"
 import { setToken,setLocalToken } from "@/utils/auth";
 import { MessageBox } from "element-ui";
 
-const {resetRouter} = require("@/router");
-const {registerAccount} = require("@/api");
+import { resetRouter } from "@/router";
+import { registerAccount } from "@/api";
 export default {
   name: "login",
   mixins: [views],
@@ -175,8 +175,8 @@ export default {
               if (this.rememberMe) {
                 localStorage.setItem("user",JSON.stringify(this.form))
               }
-              sessionStorage.setItem("roleList",loginRes.data.roleList);
-              resetRouter(loginRes.data.roleList);
+              sessionStorage.setItem("roleList",JSON.stringify(loginRes.data.userMenuList));
+              await resetRouter();
               this.goPage({routeName: "homePage"})
             }
           } else {

@@ -1,112 +1,96 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import {types} from "sass";
-import List = types.List;
+import Vue from 'vue';
+import Router from 'vue-router';
 
+// @ts-ignore
+import {getRole} from "@/api/index.js"
 
 Vue.use(Router)
 
-
+let router: Router;
 //每次刷新页会调用的方法
-export const createRouter = () => {
-    let children;
-    const roleList = <string>sessionStorage.getItem("roleList"); //从session 获取
-    let arr;
-    if (roleList) {
-        arr = JSON.parse(<string>sessionStorage.getItem("roleList"));
-    } else {
-        arr = []; // 没有的话，说明已经关闭过浏览器了，从接口重新获取
-    }
-    arr = [
-        {
-            path: '/uploadPage',
-            name: 'uploadPage',
-            component: () => import('../views/upload.vue')
-        }
-    ] // 模拟获取到的
 
-    if (arr) {
-        children = [...arr];
-    } else {
-        children = [...[]]
+export const translate = (roleList: any) => {
+
+    for (let i in roleList) {
+        const str = roleList[i].component;
+        roleList[i] = {
+            path: roleList[i].path,
+            name: roleList[i].name,
+            component: () => import(`@/views/${str}`),
+            children: [...roleList[i].childrenList]
+        };
+        if (roleList[i].children.length > 0) {
+            translate(roleList[i].children)
+        }
+
     }
-    let rra = [
-        {
-            path: '/',
-            redirect: '/login'
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: () => import('../views/login.vue'),
-        }, {
-            path: '/homePage',
-            name: 'homePage',
-            component: () => import('../views/homePage.vue'),
-            children: [
-                ...children
-            ]
-        }];
-    let routes = [...rra]
-    return new Router({
-        mode: 'history',
-        base: process.env.VUE_APP_PUBLIC_PATH,
-        routes
-    });
+
 }
 
-let router = createRouter();
+export const createRouter = async () => {
 
-//登录后会调用的方法
-export const resetRouter = (roleList: any) => {
-    let children;
+    const roleList = <any>sessionStorage.getItem("roleList"); //从session 获取
+    let arr: any[];
     if (roleList) {
 
-        children = [...roleList];
+        arr = JSON.parse(roleList);
+
     } else {
-        children = [...[]]
+        let res = await getRole();
+
+        arr = res.data;
+        sessionStorage.setItem("roleList", JSON.stringify(res.data)); //存入session
+
     }
-    let rra = [
+    let routes: any[] = [
         {
             path: '/',
             redirect: '/login'
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: () => import('../views/login.vue'),
-        }, {
-            path: '/homePage',
-            name: 'homePage',
-            component: () => import('../views/homePage.vue'),
-            children: [
-                ...children
-            ]
-        }];
-    const routes = [...rra]
+        }
+    ];
+    if (arr && arr.length > 0)  {
+        translate(arr);
+        routes.push(...arr);
+    } else {
+        routes.push(...[
+            {
+                path: '/login',
+                name: 'login',
+                component: () => import('../views/login.vue'),
+                children: []
+            },
+            {
+                path: '/homePage',
+                name: 'homePage',
+                component: () => import('../views/homePage.vue'),
+                children: []
+            }
+        ])
+    }
+
     router = new Router({
         mode: 'history',
         base: process.env.VUE_APP_PUBLIC_PATH,
         routes
     });
+
     return router;
 }
 
+router = await createRouter();
+
+
+//登录后会调用的方法
+export const resetRouter = async () => {
+    router = await createRouter();
+}
+
 export const getRoleList = () => {
-    const role = <string>sessionStorage.getItem("roleList");
-    let roleList;
+    const role = JSON.parse(<string>sessionStorage.getItem("roleList"));
+    let roleList: any = [];
     if (role) {
         roleList = JSON.parse(<string>sessionStorage.getItem("roleList"));
-    } else {
-        roleList = [];
     }
-    roleList = [
-        {
-            path: '/uploadPage',
-            name: 'uploadPage',
-            nameCn: "媒体"
-        }
-    ]
     return roleList;
 }
 
