@@ -11,8 +11,19 @@ const whiteList = [
   "login"
 ];
 
+
+
+
 router.beforeEach(async (to, from, next) => {
   if (to.path === '/') {
+
+   const routerList = store.getters.getRouterList;
+   if (routerList && routerList.length > 0) {
+     router.options = routerList;
+     router.addRoutes(routerList)
+     next(to.path);
+   }
+
     if (to.name === 'homePage') {
       Element.Message.error('没有分配任何权限，请联系管理员');
     } else {
@@ -62,6 +73,6 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.afterEach((to, from) => {
-  // NProgress.done(); //打开一个页面转圈圈，加载完圈圈消失
+  NProgress.done()
 });
 

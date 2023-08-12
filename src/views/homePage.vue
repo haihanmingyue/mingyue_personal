@@ -72,7 +72,6 @@ export default {
           this.pageList.push(...obj.childrenList)
         }
       }
-      console.log("this.pageList", this.pageList)
       this.activeIndex = this.$route.name
     })
   },
@@ -100,6 +99,7 @@ export default {
       if (res && res.code && res.code === 200) {
         removeToken();
         removeLocalToken();
+        sessionStorage.removeItem("roleList")
         this.goPage({routeName: 'login', params: {}})
       }
     },

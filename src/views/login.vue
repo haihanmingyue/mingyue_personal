@@ -95,7 +95,7 @@ import {encryptedData} from "@/utils/jsencrypt.ts"
 import {login} from "@/api/index.js"
 import { setToken,setLocalToken } from "@/utils/auth";
 import { MessageBox } from "element-ui";
-
+import store from "@/store";
 import { resetRouter } from "@/router";
 import { registerAccount } from "@/api";
 export default {
@@ -175,7 +175,7 @@ export default {
               if (this.rememberMe) {
                 localStorage.setItem("user",JSON.stringify(this.form))
               }
-              sessionStorage.setItem("roleList",JSON.stringify(loginRes.data.userMenuList));
+              store.commit('SET_ROLE_LIST',loginRes.data.userMenuList);
               await resetRouter();
               this.goPage({routeName: "homePage"})
             }

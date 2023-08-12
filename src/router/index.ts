@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-
+import store from "@/store";
 // @ts-ignore
 import {getRole} from "@/api/index.js"
 
@@ -10,7 +10,7 @@ let router: Router;
 //每次刷新页会调用的方法
 
 export const translate = (roleList: any) => {
-
+    console.log("askljdklaj")
     for (let i in roleList) {
         const str = roleList[i].component;
         roleList[i] = {
@@ -29,17 +29,17 @@ export const translate = (roleList: any) => {
 
 export const createRouter = async () => {
 
-    const roleList = <any>sessionStorage.getItem("roleList"); //从session 获取
+    const roleList = store.getters.getRoleList
+    console.log("roleList1", roleList)
     let arr: any[];
-    if (roleList) {
+    if (roleList && roleList.length > 0) {
 
-        arr = JSON.parse(roleList);
+        arr = Object.assign([],roleList);
 
     } else {
         let res = await getRole();
-
-        arr = res.data;
-        sessionStorage.setItem("roleList", JSON.stringify(res.data)); //存入session
+        arr = Object.assign([],res.data); //直接arr = res.data , 修改arr 就等于修改res.data,影响store.commit('SET_ROLE_LIST',res.data);
+        store.commit('SET_ROLE_LIST',res.data);
 
     }
     let routes: any[] = [
@@ -50,6 +50,7 @@ export const createRouter = async () => {
     ];
     if (arr && arr.length > 0)  {
         translate(arr);
+        store.commit("SET_ROUTER_LIST", arr);
         routes.push(...arr);
     } else {
         routes.push(...[
@@ -73,7 +74,6 @@ export const createRouter = async () => {
         base: process.env.VUE_APP_PUBLIC_PATH,
         routes
     });
-
     return router;
 }
 
@@ -86,12 +86,7 @@ export const resetRouter = async () => {
 }
 
 export const getRoleList = () => {
-    const role = JSON.parse(<string>sessionStorage.getItem("roleList"));
-    let roleList: any = [];
-    if (role) {
-        roleList = JSON.parse(<string>sessionStorage.getItem("roleList"));
-    }
-    return roleList;
+    return store.getters.getRoleList;
 }
 
 export default router
