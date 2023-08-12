@@ -10,7 +10,7 @@ export default new Vuex.Store({
   },
   getters: {
     getRoleList: state => state.roleList,
-    getRouterList: state => state.routerList
+    getRouterList: state => state.routerList,
   },
   mutations: {
     SET_ROLE_LIST(state, list) {
@@ -18,7 +18,7 @@ export default new Vuex.Store({
     },
     SET_ROUTER_LIST(state, list) {
       state.routerList = list
-    }
+    },
   },
   actions: {
   },

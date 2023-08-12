@@ -11,18 +11,39 @@ const whiteList = [
   "login"
 ];
 
+let flag = false;
 
-
+export const findPath = (routerName, routerList) =>{
+  flag = false;
+  console.log("routerName", routerName)
+  console.log("routerList", routerList)
+  if (routerName && routerList && routerList.length > 0) { // 判断是否有
+    for (let i in routerList) {
+      if (routerList[i].name === routerName) {
+        console.log("routerList[i].name", routerList[i].name)
+        flag = true;
+        return;
+      }
+      if (routerList[i].children && routerList[i].children.length > 0) {
+        findPath(routerName,routerList[i].children)
+      }
+    }
+  }
+}
 
 router.beforeEach(async (to, from, next) => {
   if (to.path === '/') {
 
-   const routerList = store.getters.getRouterList;
-   if (routerList && routerList.length > 0) {
-     router.options = routerList;
-     router.addRoutes(routerList)
-     next(to.path);
-   }
+    //获取缓存中的路由
+    const routerList = store.getters.getRouterList;
+    console.log("to.name", to.name)
+    findPath(to.name, routerList);
+    if (flag) {
+         //更新router的路由
+         router.options = routerList;
+         router.addRoutes(routerList)
+         next({name: to.name});
+     }
 
     if (to.name === 'homePage') {
       Element.Message.error('没有分配任何权限，请联系管理员');
