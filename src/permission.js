@@ -15,12 +15,12 @@ let flag = false;
 
 export const findPath = (routerName, routerList) =>{
   flag = false;
-  console.log("routerName", routerName)
-  console.log("routerList", routerList)
+  // console.log("routerName", routerName)
+  // console.log("routerList", routerList)
   if (routerName && routerList && routerList.length > 0) { // 判断是否有
     for (let i in routerList) {
       if (routerList[i].name === routerName) {
-        console.log("routerList[i].name", routerList[i].name)
+        // console.log("routerList[i].name", routerList[i].name)
         flag = true;
         return;
       }
@@ -43,12 +43,12 @@ router.beforeEach(async (to, from, next) => {
          router.options = routerList;
          router.addRoutes(routerList)
          next({name: to.name});
-     }
-
-    if (to.name === 'homePage') {
-      Element.Message.error('没有分配任何权限，请联系管理员');
-    } else {
-      Element.Message.error('没有该功能权限');
+     } else {
+      if (to.name === 'homePage') {
+        Element.Message.error('没有分配任何权限，请联系管理员');
+      } else {
+        Element.Message.error('没有该功能权限');
+      }
     }
 
   } else {

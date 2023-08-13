@@ -70,6 +70,17 @@
               <template slot="prepend"><i class="el-icon-lock"></i></template>
             </el-input>
           </el-form-item>
+          <el-form-item prop="email">
+            <el-input v-model="regForm.email" placeholder="邮箱">
+              <template slot="prepend" style="font-size: 20px"><i class="el-icon-message"></i></template>
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="code">
+            <el-input v-model="regForm.code" placeholder="验证码" style="width: 70%">
+              <template slot="prepend" style="font-size: 20px"><i class="el-icon-message"></i></template>
+            </el-input>
+            <el-button :disabled="sendDis" style="width: 30%; text-align: left" @click="sendEmail(regForm.email)">{{regForm.time}}</el-button>
+          </el-form-item>
           <el-form-item >
             <a style="float: right;cursor: pointer; color: #409EFF" @click="goLogin"> 返回 </a>
           </el-form-item>
@@ -94,10 +105,11 @@ import views from "@/utils/views";
 import {encryptedData} from "@/utils/jsencrypt.ts"
 import {login} from "@/api/index.js"
 import { setToken,setLocalToken } from "@/utils/auth";
-import { MessageBox } from "element-ui";
+import Element from "element-ui";
+import {checkEmail} from "@/utils/email";
 import store from "@/store";
 import { resetRouter } from "@/router";
-import { registerAccount } from "@/api";
+import { registerAccount,getCode } from "@/api";
 export default {
   name: "login",
   mixins: [views],
@@ -105,6 +117,7 @@ export default {
   },
   data(){
     return {
+      sendDis: false,
       count: 0,
       rememberMe: 0,
       regicon: 'el-icon-check',
@@ -124,11 +137,28 @@ export default {
         passWord: [
           { required: true, message: '请输入密码', trigger: 'change' },
           // { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'change' },
+          // { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'change' },
+          // { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
         ]
+
       },
       form: {},
-      regForm: {}
+      regForm: {
+      },
+      timer: null
     }
+  },
+  created() {
+    this.$nextTick(() =>{
+      this.$set(this.regForm, 'time', '获取')
+      this.timer = null;
+    })
   },
   mounted() {
     const res = localStorage.getItem("user");
@@ -138,6 +168,32 @@ export default {
     }
   },
   methods:{
+    async sendEmail(email) {
+      if (!email) {
+        Element.Message.error("请输入邮箱")
+        return;
+      }
+      if (!checkEmail(email)) {
+        Element.Message.error("请输入正确的邮箱")
+        return;
+      }
+      const res = await getCode(email);
+      if (res && res.code === 200) {
+        this.sendDis = true;
+        this.regForm.time = 60;
+        this.timer = setInterval(() =>{
+          this.regForm.time -= 1;
+          if (this.regForm.time === 0) {
+            this.regForm.time = '获取'
+            this.sendDis = false;
+            if (this.timer != null) {
+              clearInterval(this.timer)
+              this.timer = null;
+            }
+          }
+        },1000)
+      }
+    },
     goLogin() {
       this.registerFlag = false;
     },

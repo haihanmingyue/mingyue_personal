@@ -17,6 +17,17 @@ export const getRole = () => {
     });
 }
 
+export const getCode = (email) => {
+    return request({
+        url: `email/getCode`,
+        method: "post",
+        data: {
+            email: email
+        }
+    })
+}
+
+
 export const upload = (fileToUpload,subType,fileObj) => {
     const formData = new FormData();
     formData.append("fileToUpload", fileToUpload);
