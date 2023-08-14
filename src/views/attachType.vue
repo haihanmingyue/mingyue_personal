@@ -96,6 +96,7 @@ export default {
   created() {
   },
   activated() {
+    this.list = []
     this.name = this.$route.query.name
     this.form.fatherType = this.$route.query.uuid;
     this.loading();

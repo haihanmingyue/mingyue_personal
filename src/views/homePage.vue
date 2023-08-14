@@ -130,11 +130,11 @@ export default {
   },
   watch: {
     $route(to,from){
-      if(to.name === 'homePage') {
-        this.activeIndex = ''
-      } else {
+      // if(to.name === 'homePage') {
+      //   this.activeIndex = ''
+      // } else {
         this.activeIndex = to.name.split("_")[0]
-      }
+      // }
     }
   }
 }

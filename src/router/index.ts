@@ -3,7 +3,9 @@ import Router from 'vue-router';
 import store from "@/store";
 // @ts-ignore
 import {getRole} from "@/api/index.js"
-
+import {getLocalToken, getToken} from "@/utils/auth";
+// @ts-ignore
+import Cookies from 'js-cookie';
 Vue.use(Router)
 
 let router: Router;
@@ -37,6 +39,18 @@ export const createRouter = async () => {
         arr = Object.assign([],roleList);
 
     } else {
+
+        let hasToken = getToken();
+        if (!hasToken) {
+            hasToken = getLocalToken();
+        }
+        if (hasToken) {
+            const cookie = Cookies.get("JSESSIONID");
+            if (!cookie) {
+                Cookies.set("JSESSIONID", hasToken);
+            }
+        }
+
         let res = await getRole();
         arr = Object.assign([],res.data); //直接arr = res.data , 修改arr 就等于修改res.data,影响store.commit('SET_ROLE_LIST',res.data);
         store.commit('SET_ROLE_LIST',res.data);
