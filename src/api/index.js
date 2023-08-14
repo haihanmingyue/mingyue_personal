@@ -100,8 +100,8 @@ export const loginOut = (data) => {
 export const registerAccount = (data) => {
     return request({
         headers: { "Content-Type": "application/json" },
-        url: `/user/register`,
+        url: `/user/register?code=${data.code}`,
         method: "post",
-        data
+        data,
     });
 };

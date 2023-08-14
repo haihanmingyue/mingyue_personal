@@ -60,19 +60,19 @@
         top:45%;left:50%;transform:translate(-50%,-50%);">
       <el-card style="max-width: 100%; height: 400px; border: #f9fafc;">
         <el-form ref="regForm" :model="regForm"  style="padding-top: 30px;float:left;width: 100%" :rules="rules">
-          <el-form-item prop="userName">
-            <el-input v-model="regForm.userName">
-              <template slot="prepend" style="font-size: 20px"><i class="el-icon-user"></i></template>
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="passWord">
-            <el-input type="password" v-model="regForm.passWord">
-              <template slot="prepend"><i class="el-icon-lock"></i></template>
-            </el-input>
-          </el-form-item>
           <el-form-item prop="email">
             <el-input v-model="regForm.email" placeholder="邮箱">
               <template slot="prepend" style="font-size: 20px"><i class="el-icon-message"></i></template>
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="passWord">
+            <el-input type="password" placeholder="请输入密码" v-model="regForm.passWord">
+              <template slot="prepend"><i class="el-icon-lock"></i></template>
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="passWordCheck">
+            <el-input type="password" placeholder="再次输入密码" v-model="regForm.passWordCheck">
+              <template slot="prepend"><i class="el-icon-lock"></i></template>
             </el-input>
           </el-form-item>
           <el-form-item prop="code">
@@ -204,8 +204,19 @@ export default {
       this.regicon = 'el-icon-loading';
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
+
           const obj = Object.assign({},this.regForm)
+
+          if (obj.passWord !== obj.passWordCheck) {
+            Element.Message.error("两次密码输入不一致！")
+            return false;
+          }
+
+          this.$set(obj, 'userName', obj.email)
           obj.passWord = encryptedData(obj.passWord);
+          obj.passWordCheck = obj.passWord;
+
+
           const loginRes = await registerAccount(obj);
           if (loginRes && loginRes.code && loginRes.code === 200) {
             this.registerFlag = false;

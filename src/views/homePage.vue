@@ -11,7 +11,6 @@
              :active-text-color="'#ffd04b'"
     >
       <div class="titleMenu" style="float: left;width: 50%;max-height: 60px;">
-
         <el-menu-item style="float: left" v-for="(i,index) in pageList" :key="index" :index="i.name"
         >
           {{i.nameCn}}
@@ -64,7 +63,12 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      this.pageList = [];
+      this.pageList = [
+        {
+          name: "homePage",
+          nameCn: "首页"
+        }
+      ];
       const arr = getRoleList();
       for (const i in arr) {
         const obj = arr[i];
@@ -105,11 +109,12 @@ export default {
     },
     handleSelect(key, keyPath) {
       if (key === this.activeIndex) {
-        return;
+        this.$router.go(0)
       } else {
         switch (key) {
+          case 'homePage':
           case 'uploadPage':
-            this.goPage({routeName: 'uploadPage'})
+            this.goPage({routeName: key})
             break
           default:
             alert(keyPath + "建设中")
