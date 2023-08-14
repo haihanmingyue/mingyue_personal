@@ -51,7 +51,7 @@
 import views from "@/utils/views"
 import {removeLocalToken,removeToken} from "@/utils/auth";
 import { getRoleList } from "@/router"
-import { loginOut } from "@/api"
+import { loginOut,checkLogin } from "@/api"
 export default {
   name: "homePage",
   mixins: [views],
@@ -62,11 +62,12 @@ export default {
     }
   },
   created() {
-    this.$nextTick(() => {
+    this.$nextTick(async () => {
       this.pageList = [
         {
           name: "homePage",
-          nameCn: "首页"
+          nameCn: "首页",
+          isTitleMenu: 1
         }
       ];
       const arr = getRoleList();
@@ -76,7 +77,11 @@ export default {
           this.pageList.push(...obj.childrenList)
         }
       }
+      this.pageList = this.pageList.filter(i => {
+        return i.isTitleMenu === 1
+      })
       this.activeIndex = this.$route.name
+      await checkLogin();
     })
   },
   activated() {

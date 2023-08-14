@@ -10,7 +10,7 @@ let router: Router;
 //每次刷新页会调用的方法
 
 export const translate = (roleList: any) => {
-    console.log("askljdklaj")
+
     for (let i in roleList) {
         const str = roleList[i].component;
         roleList[i] = {
@@ -30,7 +30,7 @@ export const translate = (roleList: any) => {
 export const createRouter = async () => {
 
     const roleList = store.getters.getRoleList
-    console.log("roleList1", roleList)
+
     let arr: any[];
     if (roleList && roleList.length > 0) {
 

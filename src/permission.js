@@ -6,6 +6,7 @@ import "nprogress/nprogress.css";
 import {h} from "vue"; // progress bar style
 import Cookies from 'js-cookie';
 import Element from "element-ui";
+import {checkLogin} from "@/api";
 
 const whiteList = [
   "login"
@@ -32,6 +33,7 @@ export const findPath = (routerName, routerList) =>{
 }
 
 router.beforeEach(async (to, from, next) => {
+
   if (to.path === '/') {
 
     //获取缓存中的路由
@@ -51,8 +53,10 @@ router.beforeEach(async (to, from, next) => {
       }
     }
 
-  } else {
+  }
+  else {
 
+    //检查是否在白名单
     if (whiteList.includes(to.name)) {
       if (to.name === 'login') {
         let hasToken = getToken();
@@ -69,8 +73,10 @@ router.beforeEach(async (to, from, next) => {
       }
       next();
     }
+    //没有在的话
     else {
       // NProgress.start();
+      await checkLogin(); //验证登录
       let hasToken = getToken(); // 获取session storage里面的JSESSIONID 这个token浏览器关闭就会清除
 
       if (!hasToken) {

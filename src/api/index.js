@@ -38,7 +38,10 @@ export const upload = (fileToUpload,subType,fileObj) => {
         method: "POST",
         data: formData,
         onUploadProgress: progressEvent => {
-            const num = (progressEvent.loaded / progressEvent.total * 100 | 0)
+            let num = (progressEvent.loaded / progressEvent.total * 100 | 0)
+            if (num >= 100) {
+                num = 99;
+            }
             if (fileObj) {
                 fileObj.onProgress({percent: num })
             }
@@ -84,6 +87,14 @@ export const attachSubTypeList = (data) => {
 export const login = (data) => {
     return request({
         url: `/user/login`,
+        method: "post",
+        data
+    });
+};
+
+export const checkLogin = (data) => {
+    return request({
+        url: `/user/checkLogin`,
         method: "post",
         data
     });
