@@ -2,11 +2,11 @@ import request from "@/utils/request";
 import views from "@/utils/views"
 
 
-export const getFileList = (attachSubType) => {
+export const getFileList = (attachSubType, pageNum = 1, pageSize = 999) => {
     return request({
         url: `/attach/findBySubType`,
         method: "post",
-        data: { attachSubType: attachSubType }
+        data: { attachSubType: attachSubType, pageNum: pageNum ,pageSize: pageSize }
     });
 }
 

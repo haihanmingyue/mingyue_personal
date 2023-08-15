@@ -27,8 +27,8 @@
         <el-button style="float: right;margin-right: 10px;margin-top: 6%" type="primary" @click="loading">刷新</el-button>
         <el-button style="float: right;margin-right: 10px;margin-top: 6%" type="primary" @click="addFlag = true">增加
         </el-button>
-<!--        <el-card class="box-card"-->
-<!--                 style="position: relative;width: 100%; height: 900px;margin-top: 10%;overflow-y: auto">-->
+        <!--        <el-card class="box-card"-->
+        <!--                 style="position: relative;width: 100%; height: 900px;margin-top: 10%;overflow-y: auto">-->
         <div style="position: relative;width: 100%;margin-top: 10%;">
 
           <el-row :gutter="0">
@@ -54,7 +54,7 @@
                 height: 30px;width: 60px;
                 color: #f9fafc;text-align:center;
                 line-height:30px;  "
-               >
+            >
               缩小
             </div>
             <div
@@ -72,46 +72,49 @@
                 line-height:30px;  ">
             </div>
 
-            <el-col :span="videoSpan">
-              <div style="width: 100%">
-                <video id="video01" ref="video01" :src="''" style="width: 100%; " controls></video>
-              </div>
-            </el-col>
+            <div ref="videoDiv" style="position: absolute;width: 100%;background-color: #525252">
+              <el-col :span="videoSpan">
+                <div style="width: 100%;">
+                  <video id="video01" ref="video01" :src="''" style="width: 100%; " controls></video>
+                </div>
+              </el-col>
 
-            <el-col :span="listSpan">
-              <div :style="{width: '100%','background-color': '#525252',height: height + 'px', maxHeight: listSpan === 4 ? '1024px' : '200px'}">
+              <el-col :span="listSpan">
+                <div
+                    :style="{width: '100%','background-color': '#525252',height: height + 'px', maxHeight: listSpan === 4 ? '1024px' : '200px'}">
 
-                          <el-row :gutter="5">
+                  <el-row :gutter="5">
 
 
-                            <el-col class="block" :span="listSpan === 24 ? 2 : 12" v-for="(i,index) in list" :key="index"
+                    <el-col class="block" :span="listSpan === 24 ? 2 : 12" v-for="(i,index) in list" :key="index"
                             :style="{width: listSpan === 24 ? '100px' : '50%', float: 'left',marginTop: '5px'}"
-                            >
-                              <div :title="i.name" @click="open(i.uuid)"
-                                   style="width: 100%;background-color: #ffffff;
+                    >
+                      <div :title="i.name" @click="open(i.uuid)"
+                           style="width: 100%;background-color: #ffffff;
                                    border: #f9fafc;
                                    border-radius: 5px;
                                    cursor: pointer;
                                    height: 30px;text-align: center;line-height: 30px;color: #000000"
-                              >
+                      >
 
-                                 <span style="">{{ i.name.toString().substring(0,5) }}</span>
+                        <span style="">{{ i.name.toString().substring(0, 5) }}</span>
 
-                              </div>
+                      </div>
 
-                            </el-col>
+                    </el-col>
 
-                          </el-row>
+                  </el-row>
 
-              </div>
-              <div id="toRight" @click="toRight" v-if="listSpan === 4"
-                   :style="{ width: '20px',top: 0,'background-color': '#409EFF',height: height + 'px','position': 'absolute',cursor: 'pointer'}">
-                <div class="toRightButton" :style="{ height: (height / 3) + 'px', position: 'absolute', top:'33%'}">
-                  <i class="el-icon-arrow-right" style="position: absolute;bottom: 50%;color: #ffffff"></i>
                 </div>
-              </div>
-            </el-col>
+                <div id="toRight" @click="toRight" v-if="listSpan === 4"
+                     :style="{ width: '20px',top: 0,'background-color': '#409EFF',height: height + 'px','position': 'absolute',cursor: 'pointer'}">
+                  <div class="toRightButton" :style="{ height: (height / 3) + 'px', position: 'absolute', top:'33%'}">
+                    <i class="el-icon-arrow-right" style="position: absolute;bottom: 50%;color: #ffffff"></i>
+                  </div>
+                </div>
+              </el-col>
 
+            </div>
           </el-row>
 
 
@@ -137,7 +140,7 @@
 
           <!--          </el-row>-->
         </div>
-<!--        </el-card>-->
+        <!--        </el-card>-->
 
         <el-dialog :title="title" :visible.sync="addFlag"
                    :close-on-click-modal="false"
@@ -230,7 +233,10 @@ export default {
     this.list = []
     this.name = this.$route.query.name
     this.loading();
-
+    const video = document.getElementById('video01');
+    if (video.src) {
+      video.src = ''
+    }
     this.handleResize();
     this.$nextTick(async () => {
 
@@ -319,13 +325,14 @@ export default {
       this.$refs['form'].resetFields();
     },
     open(uuid) {
-      this.handleResize();
-      this.videoDia = true;
       this.$nextTick(() => {
         const video = document.getElementById("video01")
+
         video.src = "/mingyue/attach/open?uuid=" + uuid;
         // console.log("src", video.src)
-        video.play();
+        video.play().then(r => {
+          this.handleResize()
+        });
       })
     },
     stopOpen() {
@@ -377,6 +384,13 @@ export default {
       return true
 
     }
+  },
+  watch: {
+    $router:{
+      handler(v) {
+        alert(v.name)
+      }
+    }
   }
 }
 </script>
@@ -411,6 +425,7 @@ export default {
   background-color: #409EFF;
   width: 100%;
 }
+
 .block:hover {
   color: #409EFF;
   transform: translateY(-5px);
